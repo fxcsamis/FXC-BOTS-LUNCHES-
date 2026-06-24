@@ -12,6 +12,8 @@ export type Screen =
   | 'send'
   | 'receive'
   | 'mining'
+  | 'invite'
+  | 'battle'
 
 const SIDE_LEFT: { id: Screen; label: string; Icon: LucideIcon }[] = [
   { id: 'home', label: 'Wallet', Icon: Wallet },

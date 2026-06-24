@@ -119,6 +119,54 @@ export const UPDATES: Update[] = [
   { id: 'u3', tag: 'UPDATE', title: 'New referral rewards', desc: 'Get 250 BILLS for every friend you invite' },
 ]
 
+// Player battle / duel
+export type Opponent = {
+  id: string
+  name: string
+  initial: string
+  level: number
+  xp: number
+  winRate: number
+}
+
+export const OPPONENTS: Opponent[] = [
+  { id: 'o1', name: 'BlitzNova', initial: 'B', level: 18, xp: 520, winRate: 64 },
+  { id: 'o2', name: 'CryptoKing', initial: 'C', level: 27, xp: 980, winRate: 78 },
+  { id: 'o3', name: 'NayeemX', initial: 'N', level: 14, xp: 410, winRate: 52 },
+  { id: 'o4', name: 'Sadia_99', initial: 'S', level: 21, xp: 690, winRate: 71 },
+]
+
+export const BATTLE_STAKES = [50, 100, 250, 500]
+
+// Referral / invite friends
+export const REFERRAL = {
+  link: 'https://fxc.app/r/rakib_fxc',
+  code: 'RAKIB-FXC',
+  totalInvited: 23,
+  totalEarned: 5750,
+  perInvite: 250,
+  // who invited the current user
+  invitedBy: { name: 'CryptoKing', username: '@cryptoking', initial: 'C', date: 'Joined via this friend' },
+}
+
+export type Referral = {
+  id: string
+  name: string
+  initial: string
+  status: 'active' | 'pending'
+  earned: number
+  time: string
+}
+
+export const REFERRALS: Referral[] = [
+  { id: 'r1', name: 'Nayeem', initial: 'N', status: 'active', earned: 250, time: '2h ago' },
+  { id: 'r2', name: 'Sadia_99', initial: 'S', status: 'active', earned: 250, time: '5h ago' },
+  { id: 'r3', name: 'Tania', initial: 'T', status: 'active', earned: 250, time: '1d ago' },
+  { id: 'r4', name: 'Arif', initial: 'A', status: 'pending', earned: 0, time: '1d ago' },
+  { id: 'r5', name: 'Mim', initial: 'M', status: 'active', earned: 250, time: '2d ago' },
+  { id: 'r6', name: 'Rdx_77', initial: 'R', status: 'active', earned: 250, time: '3d ago' },
+]
+
 // Profile feature buttons — some active, some coming soon
 export type ProfileFeature = {
   id: string

@@ -44,7 +44,7 @@ const FEATURE_ICONS: Record<string, LucideIcon> = {
 // Which working features jump to another screen
 const FEATURE_NAV: Record<string, Screen> = {
   pf1: 'home',
-  pf2: 'tasks',
+  pf2: 'invite',
   pf3: 'mining',
 }
 

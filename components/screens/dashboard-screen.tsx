@@ -3,12 +3,13 @@
 import {
   ArrowLeftRight,
   ChevronRight,
+  Eye,
   Gamepad2,
   Gift,
   ListChecks,
   Megaphone,
   Pickaxe,
-  Radio,
+  Swords,
   TrendingUp,
   Trophy,
   Users,
@@ -18,7 +19,8 @@ import {
 import Image from 'next/image'
 import { motion } from 'motion/react'
 import type { Screen } from '@/components/bottom-nav'
-import { LIVE_EARNERS, UPDATES, USER } from '@/lib/data'
+import { LiveTicker } from '@/components/live-ticker'
+import { UPDATES, USER } from '@/lib/data'
 import { formatBills } from '@/lib/format'
 
 const container = {
@@ -46,9 +48,13 @@ export function DashboardScreen({ onNavigate }: { onNavigate: (s: Screen) => voi
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-4 px-4">
       {/* Profile header */}
       <motion.div variants={item} className="flex items-center gap-3 pt-1">
-        <div className="size-11 overflow-hidden rounded-2xl ring-2 ring-primary/40">
+        <motion.div
+          whileTap={{ scale: 0.92 }}
+          onClick={() => onNavigate('profile')}
+          className="size-11 cursor-pointer overflow-hidden rounded-2xl ring-2 ring-primary/40"
+        >
           <Image src="/images/mascot.png" alt="Avatar" width={44} height={44} className="size-11 object-cover" />
-        </div>
+        </motion.div>
         <div className="min-w-0 flex-1">
           <p className="text-[11px] text-muted-foreground">Welcome back</p>
           <p className="truncate font-heading text-sm font-semibold">{USER.name}</p>
@@ -61,48 +67,89 @@ export function DashboardScreen({ onNavigate }: { onNavigate: (s: Screen) => voi
         </div>
       </motion.div>
 
-      {/* Live earners feed */}
+      {/* Glassy balance card */}
       <motion.div variants={item}>
-        <div className="glass relative overflow-hidden rounded-3xl p-4">
-          <div className="pointer-events-none absolute -left-8 -top-10 size-32 rounded-full bg-primary/15 blur-3xl" />
-          <div className="relative mb-3 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="relative flex size-2.5 items-center justify-center">
-                <span className="absolute size-2.5 animate-ping rounded-full bg-primary/70" />
-                <span className="size-2 rounded-full bg-primary" />
-              </span>
-              <h2 className="font-heading text-sm font-semibold">Live Earnings</h2>
+        <div className="glass relative overflow-hidden rounded-3xl p-5">
+          {/* ambient glow */}
+          <div className="pointer-events-none absolute -right-12 -top-14 size-48 rounded-full bg-primary/25 blur-3xl" />
+          {/* floating crystal */}
+          <motion.div
+            animate={{ y: [0, -8, 0], rotate: [0, 4, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+            className="pointer-events-none absolute -right-2 top-3"
+          >
+            <Image
+              src="/images/fxc-crystal.png"
+              alt=""
+              width={120}
+              height={120}
+              className="size-28 object-contain drop-shadow-[0_8px_24px_rgba(132,204,22,0.35)]"
+            />
+          </motion.div>
+
+          <div className="relative">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              Amount Balance
+              <Eye className="size-3.5" />
             </div>
-            <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
-              <Radio className="size-3.5" /> 4.2k online
-            </span>
+            <div className="mt-2 flex items-end gap-2">
+              <span className="font-heading text-[34px] font-bold leading-none tracking-tight tabular-nums">
+                {formatBills(USER.balance)}
+              </span>
+              <span className="mb-0.5 text-sm font-semibold text-primary">FXC BILLS</span>
+            </div>
+            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-primary/15 px-2.5 py-1 text-xs font-medium text-primary">
+              <TrendingUp className="size-3.5" />
+              +{formatBills(USER.todayEarned)} today
+            </div>
           </div>
 
-          {/* vertical marquee */}
-          <div className="relative h-32 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,#000_18%,#000_82%,transparent)]">
-            <motion.div
-              animate={{ y: ['0%', '-50%'] }}
-              transition={{ duration: 14, ease: 'linear', repeat: Infinity }}
-              className="flex flex-col gap-2"
-            >
-              {[...LIVE_EARNERS, ...LIVE_EARNERS].map((e, i) => (
-                <div key={`${e.id}-${i}`} className="flex items-center gap-3 rounded-2xl bg-white/[0.04] p-2">
-                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary">
-                    {e.initial}
-                  </span>
-                  <p className="min-w-0 flex-1 truncate text-xs">
-                    <span className="font-semibold">{e.name}</span>
-                    <span className="text-muted-foreground"> {e.action}</span>
-                  </p>
-                  <span className="shrink-0 font-mono text-xs font-semibold tabular-nums text-primary">
-                    +{formatBills(e.amount)}
-                  </span>
-                </div>
-              ))}
-            </motion.div>
+          {/* tiny live ticker pinned bottom-left */}
+          <div className="relative mt-5 flex items-center">
+            <div className="glass max-w-[62%] rounded-full px-2.5 py-1">
+              <LiveTicker />
+            </div>
           </div>
         </div>
       </motion.div>
+
+      {/* Player Battle banner */}
+      <motion.button
+        variants={item}
+        whileTap={{ scale: 0.98 }}
+        onClick={() => onNavigate('battle')}
+        className="relative flex h-28 w-full items-center overflow-hidden rounded-3xl text-left"
+      >
+        <Image
+          src="/images/battle-arena.png"
+          alt=""
+          fill
+          sizes="(max-width: 448px) 100vw, 448px"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/85 via-background/40 to-transparent" />
+        <div className="relative flex w-full items-center gap-3 px-5">
+          <motion.span
+            animate={{ rotate: [0, -8, 8, 0] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+            className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/20 text-primary glow-primary"
+          >
+            <Swords className="size-6" strokeWidth={2.2} />
+          </motion.span>
+          <div className="min-w-0 flex-1">
+            <span className="mb-1 inline-block rounded-full bg-primary/20 px-2 py-0.5 text-[10px] font-semibold text-primary">
+              PLAYER BATTLE
+            </span>
+            <p className="font-heading text-base font-bold leading-tight">Player Duel · Win Big</p>
+            <p className="mt-0.5 truncate text-xs text-muted-foreground">
+              Challenge players & win FXC BILLS
+            </p>
+          </div>
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+            <ChevronRight className="size-4" />
+          </span>
+        </div>
+      </motion.button>
 
       {/* Quick action grid */}
       <motion.div variants={item}>
@@ -136,13 +183,18 @@ export function DashboardScreen({ onNavigate }: { onNavigate: (s: Screen) => voi
         className="glass relative flex w-full items-center gap-3 overflow-hidden rounded-3xl p-4 text-left"
       >
         <div className="pointer-events-none absolute -right-6 -top-8 size-28 rounded-full bg-primary/25 blur-2xl" />
-        <Image
-          src="/images/fox-miner.png"
-          alt=""
-          width={56}
-          height={56}
-          className="relative size-14 shrink-0 object-contain drop-shadow-lg"
-        />
+        <motion.div
+          animate={{ y: [0, -6, 0] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <Image
+            src="/images/fox-miner.png"
+            alt=""
+            width={56}
+            height={56}
+            className="relative size-14 shrink-0 object-contain drop-shadow-lg"
+          />
+        </motion.div>
         <div className="relative min-w-0 flex-1">
           <span className="mb-1 inline-block rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-semibold text-primary">
             2X BOOST LIVE
@@ -181,6 +233,7 @@ export function DashboardScreen({ onNavigate }: { onNavigate: (s: Screen) => voi
       <motion.button
         variants={item}
         whileTap={{ scale: 0.98 }}
+        onClick={() => onNavigate('invite')}
         className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary/10 py-3 text-xs font-medium text-primary"
       >
         <Users className="size-4" />

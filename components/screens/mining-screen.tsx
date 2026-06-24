@@ -13,8 +13,16 @@ export function MiningScreen({ onBack }: { onBack: () => void }) {
   const [energy, setEnergy] = useState(820)
   const [pops, setPops] = useState<Pop[]>([])
   const [boosted, setBoosted] = useState(false)
+  const [claimed, setClaimed] = useState<number | null>(null)
   const maxEnergy = 1000
   const perTap = boosted ? 4 : 2
+
+  function claim() {
+    if (mined < 1) return
+    setClaimed(mined)
+    setMined(0)
+    setTimeout(() => setClaimed(null), 2000)
+  }
 
   // passive regen
   useEffect(() => {

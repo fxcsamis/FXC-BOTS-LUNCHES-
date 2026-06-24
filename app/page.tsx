@@ -12,6 +12,8 @@ import { ProfileScreen } from '@/components/screens/profile-screen'
 import { SendScreen } from '@/components/screens/send-screen'
 import { ReceiveScreen } from '@/components/screens/receive-screen'
 import { MiningScreen } from '@/components/screens/mining-screen'
+import { InviteScreen } from '@/components/screens/invite-screen'
+import { BattleScreen } from '@/components/screens/battle-screen'
 import { USER } from '@/lib/data'
 
 const TABS: Screen[] = ['dashboard', 'home', 'tasks', 'games', 'profile']
@@ -48,6 +50,8 @@ export default function Page() {
               {screen === 'send' && <SendScreen onBack={() => setScreen('home')} />}
               {screen === 'receive' && <ReceiveScreen onBack={() => setScreen('home')} />}
               {screen === 'mining' && <MiningScreen onBack={() => setScreen('dashboard')} />}
+              {screen === 'invite' && <InviteScreen onBack={() => setScreen('dashboard')} />}
+              {screen === 'battle' && <BattleScreen onBack={() => setScreen('dashboard')} />}
             </motion.div>
           </AnimatePresence>
         </main>
