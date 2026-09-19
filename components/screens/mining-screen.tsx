@@ -173,7 +173,7 @@ export function MiningScreen({ onBack }: { onBack: () => void }) {
         </motion.button>
         <motion.button
           whileTap={{ scale: 0.96 }}
-          onClick={() => setMined(0)}
+          onClick={claim}
           disabled={mined < 1}
           className="flex items-center justify-center gap-2 rounded-2xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground transition active:scale-95 disabled:opacity-40"
         >
@@ -181,6 +181,19 @@ export function MiningScreen({ onBack }: { onBack: () => void }) {
           Claim {formatBills(mined)}
         </motion.button>
       </div>
+
+      <AnimatePresence>
+        {claimed !== null && (
+          <motion.div
+            initial={{ opacity: 0, y: 8, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 8, scale: 0.95 }}
+            className="mx-auto mt-3 flex w-fit items-center gap-2 rounded-full bg-primary/15 px-3 py-2 text-xs font-semibold text-primary"
+          >
+            <Coins className="size-3.5" /> +{formatBills(claimed)} FXC BILLS claimed
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <p className="mt-3 text-center text-[11px] text-muted-foreground">
         Energy refills automatically over time. Claim anytime to add BILLS to your wallet.
