@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ArrowLeft, Bolt, Coins, Gauge, Hand, Rocket, Zap } from 'lucide-react'
+import { ArrowLeft, Bolt, Coins, Gauge, Hand, Pickaxe, Rocket, Trophy, Users, Zap } from 'lucide-react'
 import Image from 'next/image'
 import { AnimatePresence, motion } from 'motion/react'
+import { LEADERBOARD, USER } from '@/lib/data'
 import { formatBills } from '@/lib/format'
 
 type Pop = { id: number; x: number; amount: number }
@@ -157,6 +158,37 @@ export function MiningScreen({ onBack }: { onBack: () => void }) {
         <StatChip Icon={Gauge} label="Rate" value={`${perTap}/tap`} />
         <StatChip Icon={Coins} label="Per hour" value={boosted ? '+2.1k' : '+1.0k'} />
         <StatChip Icon={Rocket} label="Boost" value={boosted ? 'ON' : 'OFF'} active={boosted} />
+      </div>
+
+      {/* mining status */}
+      <div className="mt-5 grid grid-cols-2 gap-2.5">
+        <div className="glass rounded-2xl p-3">
+          <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground"><Pickaxe className="size-3.5 text-primary" /> Network rate</div>
+          <p className="mt-1 font-heading text-base font-bold">{boosted ? '2.1k' : '1.0k'} <span className="text-[10px] font-medium text-primary">BILLS/hr</span></p>
+        </div>
+        <div className="glass rounded-2xl p-3">
+          <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground"><Users className="size-3.5 text-primary" /> Active miners</div>
+          <p className="mt-1 font-heading text-base font-bold">2,486 <span className="text-[10px] font-medium text-primary">online</span></p>
+        </div>
+      </div>
+
+      {/* top miners */}
+      <div className="glass mt-3 rounded-2xl p-3.5">
+        <div className="mb-2.5 flex items-center justify-between">
+          <div className="flex items-center gap-2"><Trophy className="size-4 text-primary" /><h2 className="font-heading text-sm font-semibold">Top miners</h2></div>
+          <span className="text-[10px] text-muted-foreground">This week</span>
+        </div>
+        <div className="space-y-2">
+          {LEADERBOARD.slice(0, 3).map((miner) => (
+            <div key={miner.rank} className="flex items-center gap-2.5">
+              <span className="w-4 text-center text-[10px] font-bold text-muted-foreground">{miner.rank}</span>
+              <div className="flex size-7 items-center justify-center rounded-full bg-primary/15 text-[11px] font-bold text-primary">{miner.name.charAt(0)}</div>
+              <span className="min-w-0 flex-1 truncate text-xs font-medium">{miner.name}</span>
+              <span className="font-mono text-[10px] text-primary">+{formatBills(miner.score)}</span>
+            </div>
+          ))}
+          <div className="flex items-center justify-between border-t border-white/10 pt-2 text-[10px] text-muted-foreground"><span>Your rank</span><span className="font-semibold text-foreground">#{USER.rank} · {formatBills(USER.todayEarned)} today</span></div>
+        </div>
       </div>
 
       {/* action buttons */}

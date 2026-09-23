@@ -1,13 +1,12 @@
 'use client'
 
-import { Gamepad2, House, ListChecks, User, Wallet, type LucideIcon } from 'lucide-react'
+import { House, ListChecks, Pickaxe, User, Wallet, type LucideIcon } from 'lucide-react'
 import { motion } from 'motion/react'
 
 export type Screen =
   | 'dashboard'
   | 'home'
   | 'tasks'
-  | 'games'
   | 'profile'
   | 'send'
   | 'receive'
@@ -20,7 +19,7 @@ const SIDE_LEFT: { id: Screen; label: string; Icon: LucideIcon }[] = [
   { id: 'tasks', label: 'Tasks', Icon: ListChecks },
 ]
 const SIDE_RIGHT: { id: Screen; label: string; Icon: LucideIcon }[] = [
-  { id: 'games', label: 'Games', Icon: Gamepad2 },
+  { id: 'mining', label: 'Mining', Icon: Pickaxe },
   { id: 'profile', label: 'Profile', Icon: User },
 ]
 

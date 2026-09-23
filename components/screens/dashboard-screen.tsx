@@ -4,7 +4,6 @@ import {
   ArrowLeftRight,
   ChevronRight,
   Eye,
-  Gamepad2,
   Gift,
   ListChecks,
   Megaphone,
@@ -38,7 +37,7 @@ const QUICK: { id: string; label: string; Icon: LucideIcon; screen?: Screen; soo
   { id: 'q3', label: 'Tasks', Icon: ListChecks, screen: 'tasks' },
   { id: 'q4', label: 'History', Icon: ArrowLeftRight, screen: 'home' },
   { id: 'q5', label: 'Promote', Icon: Megaphone, soon: true },
-  { id: 'q6', label: 'Games', Icon: Gamepad2, screen: 'games' },
+  { id: 'q6', label: 'Mining Stats', Icon: Pickaxe, screen: 'mining' },
   { id: 'q7', label: 'Rewards', Icon: Gift, screen: 'tasks' },
   { id: 'q8', label: 'Ranks', Icon: Trophy, screen: 'profile' },
 ]

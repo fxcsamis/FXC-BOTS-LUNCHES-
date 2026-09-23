@@ -5,9 +5,7 @@ import {
   ArrowUpRight,
   BadgeCheck,
   Eye,
-  Gamepad2,
   Gift,
-  Grid2x2,
   ListChecks,
   Pickaxe,
   TrendingUp,
@@ -124,7 +122,7 @@ export function HomeScreen({ onNavigate }: { onNavigate: (s: Screen) => void }) 
         <ActionButton Icon={ArrowUpRight} label="Send" accent onClick={() => onNavigate('send')} />
         <ActionButton Icon={ArrowDownLeft} label="Receive" onClick={() => onNavigate('receive')} />
         <ActionButton Icon={Pickaxe} label="Mine" onClick={() => onNavigate('mining')} />
-        <ActionButton Icon={Grid2x2} label="More" onClick={() => onNavigate('games')} />
+        <ActionButton Icon={Pickaxe} label="Mining" onClick={() => onNavigate('mining')} />
       </motion.div>
 
       {/* Banner buttons */}
@@ -144,12 +142,12 @@ export function HomeScreen({ onNavigate }: { onNavigate: (s: Screen) => void }) 
             sub="Tap to boost"
             onClick={() => onNavigate('mining')}
           />
-          <CompactBanner
-            Icon={Gamepad2}
-            title="Mini Games"
-            sub="6 live now"
-            onClick={() => onNavigate('games')}
-          />
+        <CompactBanner
+          Icon={Pickaxe}
+          title="FXC Mining"
+          sub="Live mining status"
+          onClick={() => onNavigate('mining')}
+        />
         </div>
         <BannerButton
           title="Verify Your Account"

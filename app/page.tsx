@@ -1,13 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { BottomNav, type Screen } from '@/components/bottom-nav'
 import { TopBar } from '@/components/top-bar'
 import { HomeScreen } from '@/components/screens/home-screen'
 import { DashboardScreen } from '@/components/screens/dashboard-screen'
 import { TasksScreen } from '@/components/screens/tasks-screen'
-import { GamesScreen } from '@/components/screens/games-screen'
 import { ProfileScreen } from '@/components/screens/profile-screen'
 import { SendScreen } from '@/components/screens/send-screen'
 import { ReceiveScreen } from '@/components/screens/receive-screen'
@@ -16,11 +15,18 @@ import { InviteScreen } from '@/components/screens/invite-screen'
 import { BattleScreen } from '@/components/screens/battle-screen'
 import { USER } from '@/lib/data'
 
-const TABS: Screen[] = ['dashboard', 'home', 'tasks', 'games', 'profile']
+const TABS: Screen[] = ['dashboard', 'home', 'tasks', 'mining', 'profile']
 
 export default function Page() {
   const [screen, setScreen] = useState<Screen>('dashboard')
   const isTab = TABS.includes(screen)
+
+  useEffect(() => {
+    const ping = () => void fetch('/api/keep-alive', { cache: 'no-store' }).catch(() => undefined)
+    ping()
+    const interval = window.setInterval(ping, 5 * 60 * 1000)
+    return () => window.clearInterval(interval)
+  }, [])
 
   return (
     <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col overflow-hidden bg-background">
@@ -45,7 +51,6 @@ export default function Page() {
               {screen === 'dashboard' && <DashboardScreen onNavigate={setScreen} />}
               {screen === 'home' && <HomeScreen onNavigate={setScreen} />}
               {screen === 'tasks' && <TasksScreen />}
-              {screen === 'games' && <GamesScreen />}
               {screen === 'profile' && <ProfileScreen onNavigate={setScreen} />}
               {screen === 'send' && <SendScreen onBack={() => setScreen('home')} />}
               {screen === 'receive' && <ReceiveScreen onBack={() => setScreen('home')} />}
