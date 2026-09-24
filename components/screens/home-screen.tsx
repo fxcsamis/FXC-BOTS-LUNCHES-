@@ -8,7 +8,6 @@ import {
   Gift,
   ListChecks,
   ArrowLeftRight,
-  Pickaxe,
   TrendingUp,
 } from 'lucide-react'
 import Image from 'next/image'
@@ -137,18 +136,19 @@ export function HomeScreen({ onNavigate }: { onNavigate: (s: Screen) => void }) 
         />
         <div className="grid grid-cols-2 gap-3">
           <CompactBanner
-            Icon={Pickaxe}
-            title="Auto Mining"
-            sub="Tap to boost"
-            onClick={() => onNavigate('mining')}
+            Icon={ArrowDownLeft}
+            title="Topup"
+            sub="Add FXC BILLS"
+            onClick={() => onNavigate('topup')}
           />
-        <CompactBanner
-          Icon={Pickaxe}
-          title="FXC Mining"
-          sub="Live mining status"
-          onClick={() => onNavigate('mining')}
-        />
+          <CompactBanner
+            Icon={ArrowUpRight}
+            title="Withdrawal"
+            sub="Cash out securely"
+            onClick={() => onNavigate('withdraw')}
+          />
         </div>
+
         <BannerButton
           title="Verify Your Account"
           subtitle="Unlock withdrawals & bonus 500 BILLS"

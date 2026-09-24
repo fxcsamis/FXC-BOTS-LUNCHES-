@@ -14,6 +14,7 @@ import { MiningScreen } from '@/components/screens/mining-screen'
 import { InviteScreen } from '@/components/screens/invite-screen'
 import { BattleScreen } from '@/components/screens/battle-screen'
 import { SwapScreen } from '@/components/screens/swap-screen'
+import { FundingScreen } from '@/components/screens/funding-screen'
 import { USER } from '@/lib/data'
 
 const TABS: Screen[] = ['dashboard', 'home', 'tasks', 'mining', 'profile']
@@ -59,6 +60,8 @@ export default function Page() {
               {screen === 'invite' && <InviteScreen onBack={() => setScreen('dashboard')} />}
               {screen === 'battle' && <BattleScreen onBack={() => setScreen('dashboard')} />}
               {screen === 'swap' && <SwapScreen onBack={() => setScreen('home')} />}
+              {screen === 'topup' && <FundingScreen mode="topup" onBack={() => setScreen('home')} />}
+              {screen === 'withdraw' && <FundingScreen mode="withdraw" onBack={() => setScreen('home')} />}
             </motion.div>
           </AnimatePresence>
         </main>
