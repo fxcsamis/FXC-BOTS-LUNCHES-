@@ -1,22 +1,17 @@
 'use client'
 
 import {
-  ArrowLeftRight,
   ChevronRight,
   Eye,
   Gift,
   ListChecks,
-  Megaphone,
   Pickaxe,
-  Swords,
   TrendingUp,
-  Trophy,
   Users,
-  Wallet,
-  type LucideIcon,
 } from 'lucide-react'
 import Image from 'next/image'
 import { motion } from 'motion/react'
+import { useEffect, useState } from 'react'
 import type { Screen } from '@/components/bottom-nav'
 import { LiveTicker } from '@/components/live-ticker'
 import { UPDATES, USER } from '@/lib/data'
@@ -31,18 +26,42 @@ const item = {
   show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 320, damping: 26 } },
 } as const
 
-const QUICK: { id: string; label: string; Icon: LucideIcon; screen?: Screen; soon?: boolean }[] = [
-  { id: 'q1', label: 'Wallet', Icon: Wallet, screen: 'home' },
-  { id: 'q2', label: 'Mining', Icon: Pickaxe, screen: 'mining' },
-  { id: 'q3', label: 'Tasks', Icon: ListChecks, screen: 'tasks' },
-  { id: 'q4', label: 'History', Icon: ArrowLeftRight, screen: 'home' },
-  { id: 'q5', label: 'Promote', Icon: Megaphone, soon: true },
-  { id: 'q6', label: 'Mining Stats', Icon: Pickaxe, screen: 'mining' },
-  { id: 'q7', label: 'Rewards', Icon: Gift, screen: 'tasks' },
-  { id: 'q8', label: 'Ranks', Icon: Trophy, screen: 'profile' },
+const SLIDES = [
+  {
+    eyebrow: 'LIMITED REWARD',
+    title: 'Earn more with daily tasks',
+    description: 'Complete simple tasks and grow your BILLS balance.',
+    image: '/images/trophy-3d.png',
+    screen: 'tasks' as Screen,
+  },
+  {
+    eyebrow: 'MINING BOOST',
+    title: 'Start mining today',
+    description: 'Activate your miner and earn while you relax.',
+    image: '/images/fox-miner.png',
+    screen: 'mining' as Screen,
+  },
+  {
+    eyebrow: 'NEW BENEFIT',
+    title: 'Invite friends, earn together',
+    description: 'Bring your friends to FXC and unlock more rewards.',
+    image: '/images/mascot.png',
+    screen: 'invite' as Screen,
+  },
 ]
 
 export function DashboardScreen({ onNavigate }: { onNavigate: (s: Screen) => void }) {
+  const [activeSlide, setActiveSlide] = useState(0)
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActiveSlide((current) => (current + 1) % SLIDES.length)
+    }, 4200)
+    return () => window.clearInterval(timer)
+  }, [])
+
+  const slide = SLIDES[activeSlide]
+
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-4 px-4">
       {/* Profile header */}
@@ -112,67 +131,34 @@ export function DashboardScreen({ onNavigate }: { onNavigate: (s: Screen) => voi
         </div>
       </motion.div>
 
-      {/* Player Battle banner */}
+      {/* Auto-rotating promotional banner */}
       <motion.button
         variants={item}
         whileTap={{ scale: 0.98 }}
-        onClick={() => onNavigate('battle')}
-        className="relative flex h-28 w-full items-center overflow-hidden rounded-3xl text-left"
+        onClick={() => onNavigate(slide.screen)}
+        className="relative h-36 w-full overflow-hidden rounded-3xl text-left"
+        aria-label={slide.title}
       >
-        <Image
-          src="/images/battle-arena.png"
-          alt=""
-          fill
-          sizes="(max-width: 448px) 100vw, 448px"
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/85 via-background/40 to-transparent" />
-        <div className="relative flex w-full items-center gap-3 px-5">
-          <motion.span
-            animate={{ rotate: [0, -8, 8, 0] }}
-            transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
-            className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/20 text-primary glow-primary"
-          >
-            <Swords className="size-6" strokeWidth={2.2} />
-          </motion.span>
-          <div className="min-w-0 flex-1">
-            <span className="mb-1 inline-block rounded-full bg-primary/20 px-2 py-0.5 text-[10px] font-semibold text-primary">
-              PLAYER BATTLE
+        <Image src={slide.image} alt="" fill sizes="(max-width: 448px) 100vw, 448px" className="object-cover object-right opacity-80" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/75 to-background/15" />
+        <div className="relative flex h-full items-center px-5">
+          <div className="max-w-[68%]">
+            <span className="mb-2 inline-block rounded-full bg-primary/20 px-2 py-1 text-[9px] font-bold tracking-wider text-primary">
+              {slide.eyebrow}
             </span>
-            <p className="font-heading text-base font-bold leading-tight">Player Duel · Win Big</p>
-            <p className="mt-0.5 truncate text-xs text-muted-foreground">
-              Challenge players & win FXC BILLS
-            </p>
+            <p className="font-heading text-lg font-bold leading-tight">{slide.title}</p>
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{slide.description}</p>
           </div>
-          <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+          <span className="absolute bottom-4 right-4 flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
             <ChevronRight className="size-4" />
           </span>
+          <div className="absolute bottom-4 left-5 flex gap-1.5" aria-label={`Slide ${activeSlide + 1} of ${SLIDES.length}`}>
+            {SLIDES.map((entry, index) => (
+              <span key={entry.title} className={`h-1 rounded-full transition-all ${index === activeSlide ? 'w-5 bg-primary' : 'w-1 bg-white/40'}`} />
+            ))}
+          </div>
         </div>
       </motion.button>
-
-      {/* Quick action grid */}
-      <motion.div variants={item}>
-        <div className="grid grid-cols-4 gap-2">
-          {QUICK.map(({ id, label, Icon, screen, soon }) => (
-            <motion.button
-              key={id}
-              whileTap={{ scale: 0.92 }}
-              onClick={() => screen && onNavigate(screen)}
-              className="glass relative flex flex-col items-center gap-1.5 rounded-2xl py-3"
-            >
-              {soon && (
-                <span className="absolute right-1 top-1 rounded-full bg-white/10 px-1.5 text-[8px] font-semibold text-muted-foreground">
-                  soon
-                </span>
-              )}
-              <span className="flex size-9 items-center justify-center rounded-xl bg-primary/15 text-primary">
-                <Icon className="size-[18px]" strokeWidth={2.2} />
-              </span>
-              <span className="text-[10px] font-medium">{label}</span>
-            </motion.button>
-          ))}
-        </div>
-      </motion.div>
 
       {/* Featured mining banner */}
       <motion.button
