@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Check, ChevronRight, Flame, Pickaxe } from 'lucide-react'
+import { Check, ChevronRight, Flame, Pickaxe, X } from 'lucide-react'
 import Image from 'next/image'
 import { motion } from 'motion/react'
 import { PlatformIcon } from '@/components/platform-icon'
@@ -20,6 +20,19 @@ export function TasksScreen() {
   const [done, setDone] = useState<Record<string, boolean>>(
     Object.fromEntries(TASKS.filter((t) => t.done).map((t) => [t.id, true])),
   )
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null)
+  const [agreed, setAgreed] = useState(false)
+
+  const openTask = (task: Task) => {
+    setSelectedTask(task)
+    setAgreed(false)
+  }
+
+  const startTask = () => {
+    if (!selectedTask || !agreed) return
+    setDone((current) => ({ ...current, [selectedTask.id]: true }))
+    setSelectedTask(null)
+  }
 
   const social = TASKS.filter((t) => t.platform !== 'app')
   const special = TASKS.filter((t) => t.platform === 'app')
@@ -104,7 +117,7 @@ export function TasksScreen() {
               key={t.id}
               task={t}
               done={!!done[t.id]}
-              onToggle={() => setDone((d) => ({ ...d, [t.id]: !d[t.id] }))}
+              onToggle={() => openTask(t)}
             />
           ))}
         </div>
@@ -119,11 +132,51 @@ export function TasksScreen() {
               key={t.id}
               task={t}
               done={!!done[t.id]}
-              onToggle={() => setDone((d) => ({ ...d, [t.id]: !d[t.id] }))}
+              onToggle={() => openTask(t)}
             />
           ))}
         </div>
       </motion.div>
+
+      {selectedTask && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 p-4 backdrop-blur-sm">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="glass w-full max-w-md rounded-3xl p-5 shadow-2xl"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="task-instructions-title"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-primary">Before you start</p>
+                <h2 id="task-instructions-title" className="mt-1 font-heading text-xl font-bold">{selectedTask.title}</h2>
+              </div>
+              <button onClick={() => setSelectedTask(null)} aria-label="Close instructions" className="rounded-full p-2 text-muted-foreground transition hover:bg-white/10">
+                <X className="size-5" />
+              </button>
+            </div>
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+              Follow the instructions carefully to complete this task and receive your reward of {formatBills(selectedTask.reward)} BILLS.
+            </p>
+            <div className="mt-4 rounded-2xl bg-primary/10 p-3 text-sm leading-relaxed">
+              {selectedTask.desc}. Finish the action, then return here to claim your reward.
+            </div>
+            <label className="mt-5 flex cursor-pointer items-center gap-3 text-sm font-medium">
+              <input type="checkbox" checked={agreed} onChange={(event) => setAgreed(event.target.checked)} className="size-4 accent-primary" />
+              I agree to follow these instructions
+            </label>
+            <button
+              onClick={startTask}
+              disabled={!agreed}
+              className="mt-5 w-full rounded-2xl bg-primary py-3 text-sm font-semibold text-primary-foreground transition active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Start task
+            </button>
+          </motion.div>
+        </div>
+      )}
     </motion.div>
   )
 }

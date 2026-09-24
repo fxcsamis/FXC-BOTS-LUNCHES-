@@ -10,7 +10,7 @@ import {
   Users,
 } from 'lucide-react'
 import Image from 'next/image'
-import { motion } from 'motion/react'
+import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import type { Screen } from '@/components/bottom-nav'
 import { LiveTicker } from '@/components/live-ticker'
@@ -132,33 +132,35 @@ export function DashboardScreen({ onNavigate }: { onNavigate: (s: Screen) => voi
       </motion.div>
 
       {/* Auto-rotating promotional banner */}
-      <motion.button
-        variants={item}
-        whileTap={{ scale: 0.98 }}
-        onClick={() => onNavigate(slide.screen)}
-        className="relative h-36 w-full overflow-hidden rounded-3xl text-left"
-        aria-label={slide.title}
-      >
-        <Image src={slide.image} alt="" fill sizes="(max-width: 448px) 100vw, 448px" className="object-cover object-right opacity-80" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/75 to-background/15" />
-        <div className="relative flex h-full items-center px-5">
-          <div className="max-w-[68%]">
-            <span className="mb-2 inline-block rounded-full bg-primary/20 px-2 py-1 text-[9px] font-bold tracking-wider text-primary">
-              {slide.eyebrow}
-            </span>
-            <p className="font-heading text-lg font-bold leading-tight">{slide.title}</p>
-            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{slide.description}</p>
-          </div>
-          <span className="absolute bottom-4 right-4 flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
-            <ChevronRight className="size-4" />
-          </span>
-          <div className="absolute bottom-4 left-5 flex gap-1.5" aria-label={`Slide ${activeSlide + 1} of ${SLIDES.length}`}>
-            {SLIDES.map((entry, index) => (
-              <span key={entry.title} className={`h-1 rounded-full transition-all ${index === activeSlide ? 'w-5 bg-primary' : 'w-1 bg-white/40'}`} />
-            ))}
-          </div>
-        </div>
-      </motion.button>
+      <motion.div variants={item} className="relative h-36 w-full overflow-hidden rounded-3xl">
+        <AnimatePresence initial={false} mode="wait">
+          <motion.button
+            key={slide.title}
+            initial={{ x: 80, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -80, opacity: 0 }}
+            transition={{ duration: 0.45, ease: 'easeInOut' }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => onNavigate(slide.screen)}
+            className="absolute inset-0 w-full text-left"
+            aria-label={slide.title}
+          >
+            <Image src={slide.image} alt="" fill sizes="(max-width: 448px) 100vw, 448px" className="object-cover object-right opacity-80" />
+            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/75 to-background/15" />
+            <div className="relative flex h-full items-center px-5">
+              <div className="max-w-[68%]">
+                <span className="mb-2 inline-block rounded-full bg-primary/20 px-2 py-1 text-[9px] font-bold tracking-wider text-primary">{slide.eyebrow}</span>
+                <p className="font-heading text-lg font-bold leading-tight">{slide.title}</p>
+                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{slide.description}</p>
+              </div>
+              <span className="absolute bottom-4 right-4 flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground"><ChevronRight className="size-4" /></span>
+              <div className="absolute bottom-4 left-5 flex gap-1.5" aria-label={`Slide ${activeSlide + 1} of ${SLIDES.length}`}>
+                {SLIDES.map((entry, index) => <span key={entry.title} className={`h-1 rounded-full transition-all ${index === activeSlide ? 'w-5 bg-primary' : 'w-1 bg-white/40'}`} />)}
+              </div>
+            </div>
+          </motion.button>
+        </AnimatePresence>
+      </motion.div>
 
       {/* Featured mining banner */}
       <motion.button
