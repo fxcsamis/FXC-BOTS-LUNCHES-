@@ -7,6 +7,7 @@ import {
   Eye,
   Gift,
   ListChecks,
+  ArrowLeftRight,
   Pickaxe,
   TrendingUp,
 } from 'lucide-react'
@@ -121,8 +122,7 @@ export function HomeScreen({ onNavigate }: { onNavigate: (s: Screen) => void }) 
       <motion.div variants={item} className="glass flex items-center gap-1 rounded-3xl p-3">
         <ActionButton Icon={ArrowUpRight} label="Send" accent onClick={() => onNavigate('send')} />
         <ActionButton Icon={ArrowDownLeft} label="Receive" onClick={() => onNavigate('receive')} />
-        <ActionButton Icon={Pickaxe} label="Mine" onClick={() => onNavigate('mining')} />
-        <ActionButton Icon={Pickaxe} label="Mining" onClick={() => onNavigate('mining')} />
+        <ActionButton Icon={ArrowLeftRight} label="Swap FXC" onClick={() => onNavigate('swap')} />
       </motion.div>
 
       {/* Banner buttons */}

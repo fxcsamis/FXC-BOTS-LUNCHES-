@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Check, ChevronRight, Flame, Pickaxe, X } from 'lucide-react'
 import Image from 'next/image'
 import { motion } from 'motion/react'
@@ -27,6 +27,13 @@ export function TasksScreen() {
     setSelectedTask(task)
     setAgreed(false)
   }
+
+  useEffect(() => {
+    document.body.style.overflow = selectedTask ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [selectedTask])
 
   const startTask = () => {
     if (!selectedTask || !agreed) return
@@ -139,7 +146,7 @@ export function TasksScreen() {
       </motion.div>
 
       {selectedTask && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 p-4 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-end justify-center overscroll-contain bg-black/70 p-4 backdrop-blur-sm">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
