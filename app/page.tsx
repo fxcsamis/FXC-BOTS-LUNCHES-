@@ -15,12 +15,15 @@ import { InviteScreen } from '@/components/screens/invite-screen'
 import { BattleScreen } from '@/components/screens/battle-screen'
 import { SwapScreen } from '@/components/screens/swap-screen'
 import { FundingScreen } from '@/components/screens/funding-screen'
+import { VerifyScreen } from '@/components/screens/verify-screen'
+import { UserListScreen } from '@/components/screens/user-list-screen'
 import { USER } from '@/lib/data'
 
 const TABS: Screen[] = ['dashboard', 'home', 'tasks', 'mining', 'profile']
 
 export default function Page() {
   const [screen, setScreen] = useState<Screen>('dashboard')
+  const [verified, setVerified] = useState(false)
   const isTab = TABS.includes(screen)
 
   useEffect(() => {
@@ -53,7 +56,12 @@ export default function Page() {
               {screen === 'dashboard' && <DashboardScreen onNavigate={setScreen} />}
               {screen === 'home' && <HomeScreen onNavigate={setScreen} />}
               {screen === 'tasks' && <TasksScreen />}
-              {screen === 'profile' && <ProfileScreen onNavigate={setScreen} />}
+              {screen === 'profile' && <ProfileScreen onNavigate={(nextScreen) => {
+                if (nextScreen === 'verify') setVerified(false)
+                setScreen(nextScreen)
+              }} verified={verified} />}
+              {screen === 'verify' && <VerifyScreen onBack={() => setScreen('profile')} onComplete={() => { setVerified(true); setScreen('profile') }} />}
+              {screen === 'user-list' && <UserListScreen onBack={() => setScreen('profile')} />}
               {screen === 'send' && <SendScreen onBack={() => setScreen('home')} />}
               {screen === 'receive' && <ReceiveScreen onBack={() => setScreen('home')} />}
               {screen === 'mining' && <MiningScreen onBack={() => setScreen('dashboard')} />}

@@ -7,6 +7,7 @@ import {
   Eye,
   Gift,
   ListChecks,
+  Pickaxe,
   ArrowLeftRight,
   TrendingUp,
 } from 'lucide-react'
